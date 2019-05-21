@@ -1,2 +1,3 @@
 # cookbook-api
-This is api for cook book app
+
+API for cook book app
