@@ -1,41 +1,48 @@
-// handles logic behing of validating request parameters, query,
-// sending response with correct code. like problem code or good code
-
-const db = require('../db');
 const UserModel = require('../models/user.model');
 const UserService = require('../services/user.service');
 
-const getUsers = (req, res, next) => {
-  // here should olso validate query parameters
-
-  // here also will set some page limits
-  try {
-    const users = await UserService.getUsers();
-    return res.status(200).json({
-      status: 200,
-      data: users,
-      message: "Users succesfully retrived"
+const getUsers = (req, res, db) => {
+  UserService.getUsers(db)
+    .then((items) => {
+      if (items.length) {
+        res.status(200).json({
+          status: 200,
+          items,
+          message: 'Users succesfully retrived'
+        });
+      } else {
+        res.json({ dataExists: 'false' });
+      }
+    })
+    .catch((error) => {
+      res.status(400).json({ status: 400, message: error.message });
     });
-  } catch (error) {
-    return res.status(400).json({ status: 400, message: error.message });
-  }
 };
 
-const postUser = (req, res) => {
+const postUser = (req, res, db) => {
+  // first find a user with identical email
+  const { error } = UserModel.validateUser(req.body);
+  if (error) {
+    return res
+      .status(400)
+      .send({ status: 400, message: 'Error with validitaion' });
+  }
+  console.log(validatedUser);
+  // than validate a schema
 
-}
+  // thang create a use
 
-const getUser = (req, res) => {
+  // and return this user in response method
 
-}
+  res.status(200).send(`Everything is good`);
+  // UserService.postUser(id, db)
+};
 
-const putUser = (req, res) => {
+const getUser = (req, res) => {};
 
-}
+const putUser = (req, res) => {};
 
-const deleteUser = (req, res) => {
-
-}
+const deleteUser = (req, res) => {};
 
 module.exports = {
   getUsers,
