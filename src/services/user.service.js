@@ -1,17 +1,87 @@
-// In this file we are creating request to a DB
-// returning an object or throw an error
+const db = require('../db');
 
-const getUsers = async () => {
-  try {
-    // here should be retriving users from a db
-    // const users = await users.find();
-    const users = '';
-    return users;
-  } catch (error) {
-    throw Error('Error while retrieve users');
-  }
+/**
+ * Get list of users from DB
+ *
+ * @returns {Promise}
+ */
+const getUsers = () => {
+  return db.select('*').from('users');
+};
+
+/**
+ * Get specific user from DB using ID of user
+ *
+ * @param {String|Number} id - id of user
+ * @returns {Promise}
+ */
+const getUserById = (id) => {
+  console.log(id);
+  return db
+    .select('*')
+    .from('users')
+    .where('id', '=', id);
+};
+
+/**
+ * Get specific user from DB using E-mail of user
+ *
+ * @param {String} email - e-mail of user
+ * @returns {Promise}
+ */
+const getUserByEmail = (email) => {
+  return db
+    .select('*')
+    .from('users')
+    .where('email', '=', email);
+};
+
+/**
+ * @param {Object} userInfo - Information about
+ * @param {String} userInfo.name - user name
+ * @param {String} userInfo.email - user email
+ * @param {String} userInfo.password - user password
+ * @return {Promise}
+ */
+const createUser = ({ name, email, password }) => {
+  return db
+    .returning('*')
+    .insert({ name, email, password })
+    .into('users');
+};
+
+/**
+ * Updating user info
+ *
+ * @param {Number} id - user ID
+ * @param {Object} updateInfo - info about user for updating
+ * @return {Promise}
+ */
+const updateUser = (id, updateInfo) => {
+  return db('users')
+    .returning('*')
+    .where('id', '=', id)
+    .update({ ...updateInfo });
+};
+
+/**
+ * Using for deliting user
+ *
+ * @param {Number} id - user id
+ * @returns {Promise}
+ */
+const deleteUser = (id) => {
+  return db('users')
+    .returning('*')
+    .where('id', '=', id)
+    .del();
 };
 
 module.exports = {
-  getUsers
+  getUsers,
+  getUserById,
+  getUserByEmail,
+  createUser,
+  updateUser,
+  deleteUser
 };
