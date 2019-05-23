@@ -6,7 +6,7 @@ const UserController = require('../controllers/user.controller');
 // /api/users/
 router
   .route('/')
-  .get((req, res) => UserController.getUsers(req, res, db))
+  .get((req, res) => UserController.getUsers(req, res))
   .post((req, res) => UserController.postUser(req, res));
 
 router

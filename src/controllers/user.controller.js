@@ -1,13 +1,13 @@
 const UserModel = require('../models/user.model');
 const UserService = require('../services/user.service');
 
-const getUsers = (req, res, db) => {
-  UserService.getUsers(db)
+const getUsers = (req, res) => {
+  UserService.getUsers()
     .then((items) => {
       if (items.length) {
         res.status(200).json({
           status: 200,
-          items,
+          data: items,
           message: 'Users succesfully retrived'
         });
       } else {
@@ -19,30 +19,119 @@ const getUsers = (req, res, db) => {
     });
 };
 
-const postUser = (req, res, db) => {
-  // first find a user with identical email
+const postUser = async (req, res) => {
   const { error } = UserModel.validateUser(req.body);
   if (error) {
     return res
       .status(400)
       .send({ status: 400, message: 'Error with validitaion' });
   }
-  console.log(validatedUser);
-  // than validate a schema
 
-  // thang create a use
+  const userExistInDB = await UserService.getUserByEmail(req.body.email)
+    .then((result) => {
+      if (result.length) {
+        return true;
+      } else {
+        return false;
+      }
+    })
+    .catch((error) => {
+      res.status(400).json({ status: 400, message: 'DB error' });
+    });
 
-  // and return this user in response method
+  if (userExistInDB) {
+    return res
+      .status(403)
+      .json({ status: 403, message: 'Something was wrote wrong' });
+  }
 
-  res.status(200).send(`Everything is good`);
-  // UserService.postUser(id, db)
+  const createdUser = await UserService.createUser(req.body)
+    .then((response) => {
+      return response;
+    })
+    .catch((error) => {
+      res.status(400).json({ status: 400, message: 'DB error' });
+    });
+
+  return res
+    .status(200)
+    .json({ status: 200, data: createdUser, message: 'User created' });
 };
 
-const getUser = (req, res) => {};
+const getUser = (req, res) => {
+  UserService.getUserById(parseInt(req.params.id))
+    .then((user) => {
+      return res
+        .status(200)
+        .json({ status: 200, data: user, message: 'User recived' });
+    })
+    .catch((error) => {
+      return res.status(404).json({ status: 404, message: 'User not exist' });
+    });
+};
 
-const putUser = (req, res) => {};
+const putUser = async (req, res) => {
+  const { error } = UserModel.validateUser(req.body);
+  if (error) {
+    return res
+      .status(400)
+      .send({ status: 400, message: 'Error with validitaion' });
+  }
 
-const deleteUser = (req, res) => {};
+  const userExistInDB = await UserService.getUserById(parseInt(req.params.id))
+    .then((result) => {
+      if (result.length) {
+        return true;
+      } else {
+        return false;
+      }
+    })
+    .catch((error) => {
+      return res.status(400).json({ status: 400, message: 'DB error' });
+    });
+
+  if (!userExistInDB) {
+    return res.status(404).json({ status: 404, message: 'User not exist' });
+  }
+
+  UserService.updateUser(parseInt(req.params.id), req.body)
+    .then((response) => {
+      return res
+        .status(200)
+        .json({ status: 200, data: response, message: 'User info updated' });
+    })
+    .catch((error) => {
+      return res.status(400).json({ status: 400, message: 'DB error' });
+    });
+};
+
+const deleteUser = async (req, res) => {
+  const userExistInDB = await UserService.getUserById(parseInt(req.params.id))
+    .then((result) => {
+      if (result.length) {
+        return true;
+      } else {
+        return false;
+      }
+    })
+    .catch((error) => {
+      return res.status(400).json({ status: 400, message: 'DB error' });
+    });
+
+  if (!userExistInDB) {
+    return res.status(404).json({ status: 404, message: 'User not exist' });
+  }
+
+  UserService.deleteUser(parseInt(req.params.id))
+    .then((deletedUser) => {
+      return res
+        .status(200)
+        .json({ status: 200, data: deletedUser, message: 'User deleted' });
+    })
+    .catch((error) => {
+      return res.status(400).json({ status: 400, message: 'DB error' });
+    });
+};
 
 module.exports = {
   getUsers,
