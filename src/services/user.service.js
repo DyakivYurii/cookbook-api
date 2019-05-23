@@ -37,20 +37,6 @@ const getUserByEmail = (email) => {
 };
 
 /**
- * @param {Object} userInfo - Information about
- * @param {String} userInfo.name - user name
- * @param {String} userInfo.email - user email
- * @param {String} userInfo.password - user password
- * @return {Promise}
- */
-const createUser = ({ name, email, password }) => {
-  return db
-    .returning('*')
-    .insert({ name, email, password })
-    .into('users');
-};
-
-/**
  * Updating user info
  *
  * @param {Number} id - user ID
