@@ -48,7 +48,7 @@ const hashingPassword = async (password) => {
 /**
  * Compare gotten password with hashed password from database
  *
- * @param {String} currentPassword - cureent password
+ * @param {String} currentPassword - current password from body
  * @param {String} hashedPassword - hashed password from database
  * @return {Boolean}
  */

@@ -1,6 +1,6 @@
 const AuthUserModel = require('../models/auth.model');
 const AuthUserService = require('../services/auth.service');
-const { hashingPassword, createToken } = require('../utils');
+const { hashingPassword, checkPassword, createToken } = require('../utils');
 
 const signIn = async (req, res) => {
   const { error } = AuthUserModel.validateSingInUser(req.body);
@@ -13,7 +13,7 @@ const signIn = async (req, res) => {
   const userFromDB = await AuthUserService.getUserByEmail(req.body.email)
     .then((result) => {
       if (result.length) {
-        return { id: result[0].id, email: result[0].email };
+        return result[0];
       } else {
         return res
           .status(403)
@@ -24,9 +24,23 @@ const signIn = async (req, res) => {
       res.status(400).json({ status: 400, message: 'DB error' });
     });
 
-  const token = createToken(userFromDB);
-
-  res.status(200).json({ status: 200, data: token, message: 'Signed In' });
+  checkPassword(req.body.password, userFromDB.password)
+    .then((result) => {
+      if (result) {
+        const token = createToken({
+          id: userFromDB.id,
+          email: userFromDB.email
+        });
+        return res
+          .status(200)
+          .json({ status: 200, data: token, message: 'Signed In' });
+      } else {
+        return res.status(401).json({ status: 401, message: 'Auth failed' });
+      }
+    })
+    .catch((error) => {
+      res.status(400).json({ status: 400, message: 'DB error' });
+    });
 };
 
 const signUp = async (req, res) => {
