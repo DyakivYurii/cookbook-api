@@ -24,19 +24,6 @@ const getUserById = (id) => {
 };
 
 /**
- * Get specific user from DB using E-mail of user
- *
- * @param {String} email - e-mail of user
- * @returns {Promise}
- */
-const getUserByEmail = (email) => {
-  return db
-    .select('*')
-    .from('users')
-    .where('email', '=', email);
-};
-
-/**
  * Updating user info
  *
  * @param {Number} id - user ID
@@ -66,8 +53,6 @@ const deleteUser = (id) => {
 module.exports = {
   getUsers,
   getUserById,
-  getUserByEmail,
-  createUser,
   updateUser,
   deleteUser
 };

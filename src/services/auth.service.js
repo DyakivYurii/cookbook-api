@@ -1,26 +1,4 @@
-const jwt = require('jsonwebtoken');
-
-/**
- * Createing a new JSON token for user
- *
- * @param {Object} userInfo - info about user
- * @param {String} userInfo.name
- * @param {String} userInfo.email
- *
- * @return {String}
- */
-const createToken = (user) => {
-  return jwt.sign(
-    {
-      name: user.name,
-      email: user.email
-    },
-    'secret',
-    {
-      expiresIn: '1d'
-    }
-  );
-};
+const db = require('../db');
 
 /**
  * @param {Object} userInfo - Information about
@@ -36,7 +14,20 @@ const createUser = ({ name, email, password }) => {
     .into('users');
 };
 
+/**
+ * Get specific user from DB using E-mail of user
+ *
+ * @param {String} email - e-mail of user
+ * @returns {Promise}
+ */
+const getUserByEmail = (email) => {
+  return db
+    .select('*')
+    .from('users')
+    .where('email', '=', email);
+};
+
 module.exports = {
-  createToken,
-  createUser
+  createUser,
+  getUserByEmail
 };
