@@ -1,6 +1,7 @@
 const cors = require('cors');
 const morgan = require('morgan');
 const express = require('express');
+const AuthMiddleware = require('./middlewares/auth.middlewares');
 
 const app = express();
 const userRouter = require('./routes/user.route');
@@ -18,7 +19,10 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
 
 app.use(authRouter);
+
+app.use('/api/users/me', AuthMiddleware.protect);
 app.use('/api/users/', userRouter);
+
 app.use('/api/recipes/', recipeRouter);
 app.use('/api/recipe-changes/', recipeChangesRouter);
 
