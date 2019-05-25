@@ -25,7 +25,7 @@ const validateElement = (validatingElement, schema) => {
 const createToken = (user) => {
   return jwt.sign(
     {
-      name: user.id,
+      _id: user.id,
       email: user.email
     },
     'secret',
@@ -39,7 +39,7 @@ const createToken = (user) => {
  * Hased a passoword for saving in Database
  *
  * @param {String} password - user password for hashing
- * @returns {String}
+ * @return {String}
  */
 const hashingPassword = async (password) => {
   return await bcrypt.hash(password, 10);

@@ -6,8 +6,7 @@ const userSchema = Joi.object()
     name: Joi.string()
       .alphanum()
       .min(3)
-      .max(30)
-      .required(),
+      .max(30),
     email: Joi.string().email({ minDomainSegments: 2 }),
     password: Joi.string().regex(/^[a-zA-Z0-9]{3,30}$/),
     access_token: [Joi.string(), Joi.number()]

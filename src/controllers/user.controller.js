@@ -31,6 +31,18 @@ const getUser = (req, res) => {
     });
 };
 
+const getMe = (req, res) => {
+  UserService.getUserById(parseInt(req.user._id))
+    .then((user) => {
+      return res
+        .status(200)
+        .json({ status: 200, data: user, message: 'User recived' });
+    })
+    .catch((error) => {
+      return res.status(404).json({ status: 404, message: 'User not exist' });
+    });
+};
+
 const putUser = async (req, res) => {
   const { error } = UserModel.validateUser(req.body);
   if (error) {
@@ -39,7 +51,7 @@ const putUser = async (req, res) => {
       .send({ status: 400, message: 'Error with validitaion' });
   }
 
-  const userExistInDB = await UserService.getUserById(parseInt(req.params.id))
+  const userExistInDB = await UserService.getUserById(parseInt(req.user._id))
     .then((result) => {
       if (result.length) {
         return true;
@@ -55,7 +67,7 @@ const putUser = async (req, res) => {
     return res.status(404).json({ status: 404, message: 'User not exist' });
   }
 
-  UserService.updateUser(parseInt(req.params.id), req.body)
+  UserService.updateUser(parseInt(req.user._id), req.body)
     .then((response) => {
       return res
         .status(200)
@@ -67,7 +79,7 @@ const putUser = async (req, res) => {
 };
 
 const deleteUser = async (req, res) => {
-  const userExistInDB = await UserService.getUserById(parseInt(req.params.id))
+  const userExistInDB = await UserService.getUserById(parseInt(req.user._id))
     .then((result) => {
       if (result.length) {
         return true;
@@ -83,7 +95,7 @@ const deleteUser = async (req, res) => {
     return res.status(404).json({ status: 404, message: 'User not exist' });
   }
 
-  UserService.deleteUser(parseInt(req.params.id))
+  UserService.deleteUser(parseInt(req.user._id))
     .then((deletedUser) => {
       return res
         .status(200)
@@ -97,6 +109,7 @@ const deleteUser = async (req, res) => {
 module.exports = {
   getUsers,
   getUser,
+  getMe,
   putUser,
   deleteUser
 };

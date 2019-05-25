@@ -6,7 +6,7 @@ const db = require('../db');
  * @returns {Promise}
  */
 const getUsers = () => {
-  return db.select('*').from('users');
+  return db.select('id', 'name', 'email').from('users');
 };
 
 /**
@@ -16,7 +16,6 @@ const getUsers = () => {
  * @returns {Promise}
  */
 const getUserById = (id) => {
-  console.log(id);
   return db
     .select('*')
     .from('users')

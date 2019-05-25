@@ -24,8 +24,8 @@ const signUpUserSchema = Joi.object().keys({
     .required()
 });
 
-const validateSingInUser = (userSignUp) => {
-  return validateElement(userSignUp, signInUserSchema);
+const validateSingInUser = (userSignIn) => {
+  return validateElement(userSignIn, signInUserSchema);
 };
 
 const validateSingUpUser = (userSignUp) => {
