@@ -4,6 +4,7 @@ const express = require('express');
 
 const app = express();
 const userRouter = require('./routes/user.route');
+const authRouter = require('./routes/auth.route');
 const recipeRouter = require('./routes/recipes.route');
 const recipeChangesRouter = require('./routes/recipe-changes.route');
 
@@ -16,6 +17,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
 
+app.use(authRouter);
 app.use('/api/users/', userRouter);
 app.use('/api/recipes/', recipeRouter);
 app.use('/api/recipe-changes/', recipeChangesRouter);

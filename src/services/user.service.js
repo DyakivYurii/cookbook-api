@@ -6,7 +6,7 @@ const db = require('../db');
  * @returns {Promise}
  */
 const getUsers = () => {
-  return db.select('*').from('users');
+  return db.select('id', 'name', 'email').from('users');
 };
 
 /**
@@ -16,38 +16,10 @@ const getUsers = () => {
  * @returns {Promise}
  */
 const getUserById = (id) => {
-  console.log(id);
   return db
     .select('*')
     .from('users')
     .where('id', '=', id);
-};
-
-/**
- * Get specific user from DB using E-mail of user
- *
- * @param {String} email - e-mail of user
- * @returns {Promise}
- */
-const getUserByEmail = (email) => {
-  return db
-    .select('*')
-    .from('users')
-    .where('email', '=', email);
-};
-
-/**
- * @param {Object} userInfo - Information about
- * @param {String} userInfo.name - user name
- * @param {String} userInfo.email - user email
- * @param {String} userInfo.password - user password
- * @return {Promise}
- */
-const createUser = ({ name, email, password }) => {
-  return db
-    .returning('*')
-    .insert({ name, email, password })
-    .into('users');
 };
 
 /**
@@ -80,8 +52,6 @@ const deleteUser = (id) => {
 module.exports = {
   getUsers,
   getUserById,
-  getUserByEmail,
-  createUser,
   updateUser,
   deleteUser
 };
