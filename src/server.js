@@ -6,7 +6,7 @@ const AuthMiddleware = require('./middlewares/auth.middlewares');
 const app = express();
 const userRouter = require('./routes/user.route');
 const authRouter = require('./routes/auth.route');
-const recipeRouter = require('./routes/recipes.route');
+const recipeRouter = require('./routes/recipe.route');
 const recipeChangesRouter = require('./routes/recipe-changes.route');
 
 if (app.get('env') === 'development') {
@@ -23,7 +23,9 @@ app.use(authRouter);
 app.use('/api/users/me', AuthMiddleware.protect);
 app.use('/api/users/', userRouter);
 
+app.use('/api/recipes/me', AuthMiddleware.protect);
 app.use('/api/recipes/', recipeRouter);
+
 app.use('/api/recipe-changes/', recipeChangesRouter);
 
 const port = process.env.PORT || 4000;

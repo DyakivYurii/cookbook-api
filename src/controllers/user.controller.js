@@ -1,5 +1,6 @@
 const UserModel = require('../models/user.model');
 const UserService = require('../services/user.service');
+const { hashingPassword } = require('../utils');
 
 const getUsers = (req, res) => {
   UserService.getUsers()
@@ -67,7 +68,19 @@ const putUser = async (req, res) => {
     return res.status(404).json({ status: 404, message: 'User not exist' });
   }
 
-  UserService.updateUser(parseInt(req.user._id), req.body)
+  const userInfo = { ...req.body };
+
+  if ('password' in req.body) {
+    await hashingPassword(userInfo.password)
+      .then((result) => {
+        userInfo.password = result;
+      })
+      .catch((error) => {
+        res.status(400).json({ status: 400, message: 'Problem with password' });
+      });
+  }
+
+  UserService.updateUser(parseInt(req.user._id), userInfo)
     .then((response) => {
       return res
         .status(200)

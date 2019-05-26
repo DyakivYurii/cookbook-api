@@ -17,7 +17,7 @@ const getUsers = () => {
  */
 const getUserById = (id) => {
   return db
-    .select('*')
+    .select('id', 'name', 'email')
     .from('users')
     .where('id', '=', id);
 };
@@ -31,7 +31,7 @@ const getUserById = (id) => {
  */
 const updateUser = (id, updateInfo) => {
   return db('users')
-    .returning('*')
+    .returning(['id', 'name', 'email'])
     .where('id', '=', id)
     .update({ ...updateInfo });
 };
@@ -44,7 +44,7 @@ const updateUser = (id, updateInfo) => {
  */
 const deleteUser = (id) => {
   return db('users')
-    .returning('*')
+    .returning('id', 'name', 'email')
     .where('id', '=', id)
     .del();
 };
