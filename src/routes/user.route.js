@@ -4,7 +4,7 @@ const UserController = require('../controllers/user.controller');
 // /api/users/
 router.route('/').get((req, res) => UserController.getUsers(req, res));
 
-router.route('/:id').get((req, res) => UserController.getUser(req, res));
+router.route('/user/:id').get((req, res) => UserController.getUser(req, res));
 
 router
   .route('/me')

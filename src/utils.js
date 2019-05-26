@@ -56,9 +56,14 @@ const checkPassword = async (currentPassword, hashedPassword) => {
   return await bcrypt.compare(currentPassword, hashedPassword);
 };
 
+const responseWithDatabaseError = (res) => {
+  return res.status(400).json({ status: 400, message: 'Db error' });
+};
+
 module.exports = {
   validateElement,
   createToken,
   hashingPassword,
-  checkPassword
+  checkPassword,
+  responseWithDatabaseError
 };
