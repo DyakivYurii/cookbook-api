@@ -4,13 +4,22 @@ const db = require('../db');
  * Get list of recipes from Database
  * Sorted by created time
  *
+ * @param {String} search - optional parameter, that pass string for searche in title of recipes
  * @returns {Promise}
  */
-const getRecipes = () => {
-  return db
-    .select('*')
-    .from('recipes')
-    .orderBy('date_creation', 'desc');
+const getRecipes = (search) => {
+  if (search && search.length) {
+    return db
+      .select('*')
+      .from('recipes')
+      .where('title', 'like', `%${search}%`)
+      .orderBy('date_creation', 'desc');
+  } else {
+    return db
+      .select('*')
+      .from('recipes')
+      .orderBy('date_creation', 'desc');
+  }
 };
 
 /**

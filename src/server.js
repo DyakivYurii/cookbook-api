@@ -9,11 +9,17 @@ const authRouter = require('./routes/auth.route');
 const recipeRouter = require('./routes/recipe.route');
 const recipeChangesRouter = require('./routes/recipe-changes.route');
 
+app.use(cors());
+
 if (app.get('env') === 'development') {
   app.use(morgan('tiny'));
 }
 
-app.use(cors());
+// var corsOptions = {
+//   origin: 'http://localhost:3000/',
+//   optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
+// };
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
