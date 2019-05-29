@@ -3,13 +3,13 @@ const RecipeModel = require('../models/recipe.model');
 const { responseWithDatabaseError } = require('../utils');
 
 const getRecipes = (req, res) => {
-  RecipeService.getRecipes()
+  const search = 'search' in req.query ? req.query.search : '';
+
+  RecipeService.getRecipes(search)
     .then((recipes) => {
-      if (recipes.length) {
-        return res
-          .status(200)
-          .json({ status: 200, data: recipes, message: 'Recipes recived' });
-      }
+      return res
+        .status(200)
+        .json({ status: 200, data: recipes, message: 'Recipes recived' });
     })
     .catch((error) => {
       return responseWithDatabaseError(res);
