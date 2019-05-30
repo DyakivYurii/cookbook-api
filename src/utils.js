@@ -28,7 +28,7 @@ const createToken = (user) => {
       _id: user.id,
       email: user.email
     },
-    'secret',
+    process.env.SECRET_KEY,
     {
       expiresIn: '1d'
     }
