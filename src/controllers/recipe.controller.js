@@ -165,10 +165,15 @@ const updateRecipe = async (req, res) => {
     return res.status(400).json({ status: 400, message: 'Not changed' });
   } else if (
     'title' in recipeInfo &&
+    !('text' in recipeInfo) &&
     recipeExistInDB.title === recipeInfo.title
   ) {
     return res.status(400).json({ status: 400, message: 'Not changed' });
-  } else if ('text' in recipeInfo && recipeExistInDB.text === recipeInfo.text) {
+  } else if (
+    'text' in recipeInfo &&
+    !('title' in recipeInfo) &&
+    recipeExistInDB.text === recipeInfo.text
+  ) {
     return res.status(400).json({ status: 400, message: 'Not changed' });
   }
 

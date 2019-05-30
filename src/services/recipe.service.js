@@ -12,7 +12,7 @@ const getRecipes = (search) => {
     return db
       .select('*')
       .from('recipes')
-      .where('title', 'like', `%${search}%`)
+      .whereRaw(`LOWER(title) LIKE LOWER('%${search}%')`)
       .orderBy('date_creation', 'desc');
   } else {
     return db
