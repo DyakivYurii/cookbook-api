@@ -6,7 +6,10 @@ const recipeCreatingSchema = Joi.object().keys({
     .min(5)
     .max(100)
     .required(),
-  text: Joi.string().required(),
+  text: Joi.string()
+    .min(5)
+    .max(3000)
+    .required(),
   date_creation: Joi.date().required(),
   author_id: Joi.number().required()
 });
