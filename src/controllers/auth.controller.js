@@ -21,13 +21,13 @@ const signIn = async (req, res) => {
       }
     })
     .catch((error) => {
-      res.status(400).json({ status: 400, message: 'DB error, Not found user' });
+      res.status(400).json({ status: 400, message: 'DB error' });
     });
 
   checkPassword(req.body.password, userFromDB.password)
     .then((result) => {
       if (result) {
-        const token = await createToken({
+        const token = createToken({
           id: userFromDB.id,
           email: userFromDB.email
         });
@@ -39,12 +39,10 @@ const signIn = async (req, res) => {
       }
     })
     .catch((error) => {
-      res
-        .status(400)
-        .json({
-          status: 400,
-          message: 'DB error, related with checking password'
-        });
+      res.status(400).json({
+        status: 400,
+        message: 'DB error, related with checking password'
+      });
     });
 };
 
