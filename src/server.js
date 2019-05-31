@@ -19,7 +19,7 @@ if (app.get('env') === 'development') {
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
-console.log(`This is my key`, process.env.SECRET_KEY);
+
 app.use(authRouter);
 
 app.use('/api/users/me', AuthMiddleware.protect);
