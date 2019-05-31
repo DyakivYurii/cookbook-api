@@ -16,15 +16,10 @@ if (app.get('env') === 'development') {
   app.use(morgan('tiny'));
 }
 
-// var corsOptions = {
-//   origin: 'http://localhost:3000/',
-//   optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
-// };
-
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
-
+console.log(`This is my key`, process.env.SECRET_KEY);
 app.use(authRouter);
 
 app.use('/api/users/me', AuthMiddleware.protect);
