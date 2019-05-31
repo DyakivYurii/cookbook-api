@@ -24,7 +24,7 @@ const signIn = async (req, res) => {
       res.status(400).json({ status: 400, message: 'DB error' });
     });
 
-  checkPassword(req.body.password, userFromDB.password)
+  await checkPassword(req.body.password, userFromDB.password)
     .then((result) => {
       if (result) {
         const token = createToken({
@@ -41,7 +41,7 @@ const signIn = async (req, res) => {
     .catch((error) => {
       res.status(400).json({
         status: 400,
-        message: 'DB error, related with checking password'
+        message: `DB error, related with checking password, ${error}`
       });
     });
 };
